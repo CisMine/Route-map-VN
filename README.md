@@ -1,15 +1,23 @@
-# optimized-route
-A website that uses the Google Maps API to create an optimized route between up to 25 waypoints (the traveling salesman problem). Useful for planning a roadtrip or a set of errands.
 
-[Click here]([https://dangbert.github.io/optimized-route/?waypoint=ChIJVXealLU_xkcRja_At0z9AGY%2CChIJgTwKgJcpQg0RaSKMYcHeNsQ%2CChIJdxs61MA5jkcRmmVXBP5fVcs%2CChIJ-88eGYp1nkcRpm2C9-efi7g%2CChIJ7feaKmwD7UcRzffjOYpAeqI&start=ChIJtTeDfh9w5kcRJEWRKN1Yy6I&end=ChIJ8UNwBh-9oRQR3Y1mdkU1Nic](https://dangbert.github.io/optimized-route/?waypoint=ChIJgTwKgJcpQg0RaSKMYcHeNsQ%2CChIJ-88eGYp1nkcRpm2C9-efi7g%2CChIJ7feaKmwD7UcRzffjOYpAeqI%2CChIJdxs61MA5jkcRmmVXBP5fVcs%2CChIJVXealLU_xkcRja_At0z9AGY&start=ChIJdd4hrwug2EcRmSrV3Vo6llI&end=ChIJ8UNwBh-9oRQR3Y1mdkU1Nic)) to see an example route for a roadtrip across Europe.
+<p align="center">
+ <h1 align="center">Optimized-route map </h1>
+</p>
 
-#### How to use: ####
-1.  Go to https://dangbert.github.io/optimized-route/
-2.  Enter the start location in the "waypoints" search box.
-3.  Enter up to 25 waypoint locations in the "Enter a waypoint" box in any order ([25 is the max the API allows](https://developers.google.com/maps/documentation/javascript/directions#waypoint-limits)).
-4.  Enter the end location in the "Set end location" box.
-5.  Mouseover a location on the left panel to view its address.
-6.  Delete waypoints with the red x; change start/end by entering a new location .
-7. **NEW:** bookmark the page at any point to save your route for revisiting later.
+
+Running in localhost to use  Google Maps API and Google Weather API to create an optimized route between up to 25 waypoints (the optimal road will be dependent in traffic - time - weather). Useful for planning a roadtrip or a set of errands.
+
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/f48a9e3e-7261-4065-965a-e150dd78b1a7" />
+</p>
+
+
+<p align="center">
+ <h1 align="center">How to use </h1>
+</p>
+
+Going to file searchCode.js and index.html change the  YOUR API KEY into your actual API KEY
 
 If the start, end, and at least one waypoint are all defined then the optimal route will be displayed on the map, and directions will be displayed in a panel to the right of the map.  You can hide/show the panel using the button in the top right of the panel.
+
+This is a remake version of https://github.com/dangbert/optimized-route
