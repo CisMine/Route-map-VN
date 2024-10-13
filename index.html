@@ -1,0 +1,243 @@
+<!--initially based on the sample code here: http://tinyurl.com/gmproj4
+using the javascript google maps api key from https://console.developers.google.com
+-->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Plan my Route</title>
+    <meta name="viewport" content="initial-scale=1.0" />
+    <meta charset="utf-8" />
+
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      #map {
+        border: 1px solid black;
+        height: 90%;
+        /* http://stackoverflow.com/questions/1260122/expand-a-div-to-take-the-remaining-width */
+        width: auto;
+        overflow: hidden;
+        postion: relative;
+        /*            margin-right: 10px;*/
+        margin-right: 10px;
+        padding-right: 15px;
+        margin-bottom: 10px;
+      }
+
+      #placeInfo {
+        margin-left: 10px;
+        float: left;
+        display: inline-block;
+        vertical-align: top;
+        width: 20%;
+        max-width: 300px;
+        min-width: 130px;
+        /*            font-size: 30px;*/
+        font-weight: bold;
+      }
+
+      #ham {
+        float: right;
+      }
+
+      #directionsPanel {
+        /*            border: 1px solid green;*/
+        padding-left: 0px;
+        margin-left: 10px;
+        float: right;
+        width: 300px;
+      }
+
+      .hidden,
+      .disabled {
+        display: none;
+      }
+
+      .on {
+        display: inline;
+      }
+
+      input {
+        width: 95%; /*90% of #placeInfo's width */
+      }
+
+      #placeInfo > t {
+        font-size: small;
+      }
+
+      #placeInfo > a {
+        /*            float:right;*/
+        display: inline-block;
+        vertical-align: bottom;
+      }
+
+      #placeInfo > h3 {
+        padding-bottom: 0px;
+        margin-bottom: 0px;
+      }
+
+      .searchInput {
+        /*            padding-bottom: 20px;*/
+      }
+
+      #searchbox {
+        margin-top: 20px;
+        margin-right: 10px;
+        font-size: 20px;
+      }
+
+      ol {
+        font: 13px/1.4 Helvetica, arial;
+      }
+
+      ol > li {
+        margin-bottom: 10px;
+      }
+
+      /*http://www.webdesignerdepot.com/2012/11/how-to-create-a-simple-css3-tooltip/*/
+      .tooltip {
+        display: inline;
+        position: relative;
+      }
+
+      .tooltip:hover:after {
+        background: #333;
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: 5px;
+        bottom: 26px;
+        color: #fff;
+        content: attr(title); /*set content to the title of the element*/
+        left: 20%;
+        padding: 5px 15px;
+        position: absolute;
+        z-index: 98;
+        width: 220px;
+      }
+
+      .tooltip:hover:before {
+        border: solid;
+        border-color: #333 transparent;
+        border-width: 6px 6px 0 6px;
+        bottom: 20px;
+        content: "";
+        left: 50%;
+        position: absolute;
+        z-index: 99;
+      }
+    </style>
+  </head>
+
+  <body>
+    <center><h1>Calculate Optimal Route Between Stops</h1></center>
+
+    <div id="placeInfo">
+      <!--where route info is displayed-->
+      <h3 style="color: black" class="" id="loading-info">Loading...</h3>
+
+      <h3 style="color: green">Start:</h3>
+      <div class="searchInput">
+        <input
+          type="text"
+          name="searchbox"
+          placeholder="Set start location"
+          id="loc1"
+          disabled
+        />
+      </div>
+      <t id="startInfo" class="tooltip"></t>
+
+      <h3 style="color: orange">Waypoints:</h3>
+      <div class="searchInput">
+        <input
+          type="text"
+          name="searchbox"
+          placeholder="Enter some waypoints"
+          id="loc2"
+          disabled
+        />
+      </div>
+      <t>
+        <ul id="waypointsInfo"></ul>
+      </t>
+
+      <h3 style="color: red">End:</h3>
+      <div class="searchInput">
+        <input
+          type="text"
+          name="searchbox"
+          placeholder="Set end location"
+          id="loc3"
+          disabled
+        />
+      </div>
+      <t id="endInfo" class="tooltip"></t>
+
+      <br /><br /><br /><br />
+      <h3 style="color: blue">Instructions:</h3>
+      <ol>
+        <li>Enter the start location in the "Start" search box.</li>
+        <li>
+          Enter desired stops in the "Waypoints" box in any order (up to 25).
+        </li>
+        <li>Enter the desired end location in the "End" box.</li>
+        <li>Mouseover a location on the left panel to view its address.</li>
+        <li>
+          Delete waypoints with the red x; change start/end by entering a new
+          location.
+        </li>
+        <li>
+          <b>NEW:</b> bookmark the page at any point to save your route for
+          revisiting later.
+        </li>
+      </ol>
+    </div>
+
+    <img id="ham" src="images/grey-hamburger.png" height="20" />
+    <div id="directionsPanel"></div>
+    <!--Floats must be above non floats (the map) tinyurl.com/gmproj13-->
+
+    <div id="totalInfo">Total Distance - Total Time</div>
+
+    <style>
+      #totalInfo {
+        font-size: 24px; /* Thay đổi kích thước chữ theo ý muốn */
+      }
+    </style>
+
+    <div id="map"></div>
+
+    <!--- ???????????????????????? -->
+    <!--where the map is rendered-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- Include JQuery -->
+    <script src="searchCode.js"></script>
+    <!--added my api key here and "&libraries=places" which imports the places library-->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=YOUR API KEY&callback=initMap&libraries=places"
+      async
+      defer
+    ></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+    <!-- google analytics: -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-6LNBE7SQ3G"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-6LNBE7SQ3G");
+    </script>
+  </body>
+</html>
